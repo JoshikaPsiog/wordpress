@@ -1,0 +1,17 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background: #f8f9fa;
+}
+
+.title {
+  text-align: center;
+}
+
+.editor {
+  border: 1px solid #ccc;
+  background: #fff;
+  min-height: 300px;
+  padding: 10px;
+  margin-top: 20px;
+}
