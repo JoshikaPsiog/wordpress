@@ -26,30 +26,136 @@ html,body{
 .left-palette{
   width:260px;
   background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border:1px solid var(--glass-border); border-radius:12px; padding:16px; display:flex; flex-direction:column; gap:14px;
+  border:1px solid var(--glass-border);
+   border-radius:12px; 
+   padding:16px;
+    display:flex;
+     flex-direction:column;
+      gap:14px;
   box-shadow: 0 8px 30px rgba(2,6,23,0.6);
 }
-.brand{display:flex;align-items:center;gap:10px;color:var(--accent)}
-.brand h3{margin:0;font-size:18px}
-.meta label{display:block;font-size:13px;color:var(--muted); margin-bottom:6px;}
-.meta input{width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--glass-border); background:transparent; color:inherit}
-.file-actions{display:flex;flex-direction:column;gap:8px;margin-top:12px}
-.action{padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02)); color:var(--accent);cursor:pointer}
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:var(--accent)}
+.brand h3{
+    margin:0;
+    font-size:18px}
+.meta label{
+    display:block;
+    font-size:13px;
+    color:var(--muted);
+     margin-bottom:6px;}
+.meta input{
+    width:100%;
+     padding:8px 10px;
+      border-radius:8px; 
+      border:1px solid var(--glass-border); 
+      background:transparent; 
+      color:inherit}
+.file-actions{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-top:12px}
+.action{
+    padding:8px 10px;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,0.06);
+    background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+     color:var(--accent);
+     cursor:pointer}
 
 /* Main editor panel */
-.editor-panel{flex:1; display:flex; flex-direction:column; gap:12px;}
-.ribbon{background:transparent;padding:12px;border-radius:12px;border:1px solid var(--glass-border);display:flex;flex-wrap:wrap;gap:8px;align-items:center;box-shadow: 0 6px 18px rgba(2,6,23,0.5);}
+.editor-panel{
+    flex:1;
+     display:flex;
+      flex-direction:column; 
+      gap:12px;}
+.ribbon{
+    background:transparent;
+    padding:12px;
+    border-radius:12px;
+    border:1px solid var(--glass-border);
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-items:center;
+    box-shadow: 0 6px 18px rgba(2,6,23,0.5);}
 
 /* toolbar chips */
-.chip{display:flex;gap:6px;align-items:center;background:var(--glass);padding:6px;border-radius:8px;border:1px solid rgba(255,255,255,0.03)}
-.chip button{background:transparent;border:0;color:inherit;padding:6px 8px;border-radius:6px;cursor:pointer}
-.chip select, .chip input[type=color]{background:transparent;border:0;color:inherit;padding:6px;cursor:pointer}
+.chip{
+    display:flex;
+    gap:6px;
+    align-items:center;
+    background:var(--glass);
+    padding:6px;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,0.03)}
+.chip button{
+    background:transparent;
+    border:0;
+    color:inherit;
+    padding:6px 8px;
+    border-radius:6px;
+    cursor:pointer}
+.chip select, .chip input[type=color]{
+    background:transparent;
+    border:0;
+    color:inherit;
+    padding:6px;
+    cursor:pointer}
 
 .editor-wrap{
-  border-radius:12px; flex:1; overflow:auto; border:1px solid var(--glass-border);
+  border-radius:12px;
+   flex:1;
+    overflow:auto;
+     border:1px solid var(--glass-border);
   background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
   padding:14px;
   min-height:420px;
+}
+/* Scrollbar Styling */
+.editor::-webkit-scrollbar {
+  width: 10px;
+}
+
+.editor::-webkit-scrollbar-thumb {
+  background: #bbb; /* light grey thumb */
+  border-radius: 10px;
+}
+
+.editor::-webkit-scrollbar-track {
+  background: #f1f1f1; /* light background */
+}
+/* Light mode (default) */
+body.light-mode {
+  background: #f8f9fa;
+  color: #000;
+}
+
+body.light-mode .editor {
+  background: #fff;
+  color: #000;
+}
+
+/* Dark mode */
+body.dark-mode {
+  background: #121212;
+  color: #fff;
+}
+
+body.dark-mode .editor {
+  background: #1e1e1e;
+  color: #fff;
+  border: 1px solid #444;
+}
+
+/* Toolbar buttons adjust */
+body.dark-mode .toolbar button {
+  background: #333;
+  color: #fff;
 }
 
 /* editable area */

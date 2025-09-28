@@ -137,7 +137,7 @@ class Toolbar {
       this.editor.exec('formatBlock', v === 'p' ? 'p' : v);
     });
     const fontSel = this.makeSelect([{value:'Arial',label:'Arial'},{value:'Georgia',label:'Georgia'},{value:'Courier New',label:'Courier'}], v=> this.editor.exec('fontName', v));
-    const sizeSel = this.makeSelect([{value:2,label:'S'},{value:3,label:'M'},{value:4,label:'L'},{value:5,label:'XL'}], v=> this.editor.exec('fontSize', v));
+    // const sizeSel = this.makeSelect([{value:2,label:'S'},{value:3,label:'M'},{value:4,label:'L'},{value:5,label:'XL'}], v=> this.editor.exec('fontSize', v));
     this.chip([headingSel, fontSel, sizeSel]);
 
     // alignment & lists
@@ -175,7 +175,7 @@ class Toolbar {
 
     // small hint
     const hint = document.createElement('div'); hint.style.color = 'var(--muted)'; hint.style.paddingLeft = '8px'; hint.style.fontSize = '12px';
-    hint.textContent = 'Shortcuts: Ctrl/Cmd + B / I / U';
+    hint.textContent = '';
     this.container.appendChild(hint);
   }
 
@@ -240,24 +240,37 @@ class Toolbar {
   }
 }
 
-/* ===========================
-   Initialize everything
-   =========================== */
+document.getElementById("toggleTheme").addEventListener("click", () => {
+
+  document.body.classList.toggle("dark-mode");
+  document.body.classList.toggle("light-mode");
+  let btn = document.getElementById("toggleTheme");
+  if (document.body.classList.contains("dark-mode")) {
+    btn.textContent = "☀️ Light Mode";
+  } else {
+    btn.textContent = "🌙 Dark Mode";
+  }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   const editor = new Editor('editor');
-  const exporter = new Exporter(editor, document.getElementById('doc-title'), document.getElementById('doc-author'));
+  const exporter = new Exporter(editor, document.getElementById('doc-title'),
+   document.getElementById('doc-author'));
   const toolbar = new Toolbar('toolbar', editor, exporter);
 
-  // hookup side panel export buttons
+
   document.getElementById('export-doc').addEventListener('click', ()=> exporter.toDoc());
   document.getElementById('export-pdf').addEventListener('click', ()=> exporter.toPDF());
 
-  // bottom row buttons
   document.getElementById('preview-btn').addEventListener('click', ()=> toolbar.preview());
-  document.getElementById('copy-text').addEventListener('click', ()=> navigator.clipboard.writeText(editor.getText()).then(()=> toolbar.showStatus('Text copied')));
-  document.getElementById('copy-html').addEventListener('click', ()=> navigator.clipboard.writeText(editor.getHTML()).then(()=> toolbar.showStatus('HTML copied')));
-  document.getElementById('clear-format').addEventListener('click', ()=> { editor.clearFormatting(); toolbar.showStatus('Formatting cleared'); });
-  document.getElementById('reset-editor').addEventListener('click', ()=> { if(confirm('Reset editor content?')) { editor.reset(); toolbar.showStatus('Reset'); } });
+  document.getElementById('copy-text').addEventListener('click', ()=>
+     navigator.clipboard.writeText(editor.getText()).then(()=> toolbar.showStatus('Text copied')));
+  document.getElementById('copy-html').addEventListener('click', ()=> 
+    navigator.clipboard.writeText(editor.getHTML()).then(()=> toolbar.showStatus('HTML copied')));
+  document.getElementById('clear-format').addEventListener('click', ()=> 
+    { editor.clearFormatting(); toolbar.showStatus('Formatting cleared'); });
+  document.getElementById('reset-editor').addEventListener('click', ()=> 
+    { if(confirm('Reset editor content?')) { editor.reset(); toolbar.showStatus('Reset'); } });
 
   // autosave example (localStorage)
   setInterval(()=> {
