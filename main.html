@@ -8,10 +8,33 @@
 <body>
   <h1 class="title">WordPress-Friendly Assignment Editor</h1>
   <div class="toolbar">
-    <button data-command="bold"><b>B</b></button>
-    <button data-command="italic"><i>I</i></button>
-    <button data-command="underline"><u>U</u></button>
-  </div>
+  <button data-command="bold"><b>B</b></button>
+  <button data-command="italic"><i>I</i></button>
+  <button data-command="underline"><u>U</u></button>
+
+  <select data-command="formatBlock">
+    <option value="p">Paragraph</option>
+    <option value="h1">H1</option>
+    <option value="h2">H2</option>
+    <option value="h3">H3</option>
+    <option value="h4">H4</option>
+    <option value="h5">H5</option>
+    <option value="h6">H6</option>
+  </select>
+
+  <!-- <select data-command="fontSize">
+    <option value="1">Small</option>
+    <option value="3">Normal</option>
+    <option value="5">Large</option>
+  </select> -->
+
+  <select data-command="fontName">
+    <option value="Arial">Arial</option>
+    <option value="Georgia">Georgia</option>
+    <option value="Courier New">Courier</option>
+  </select>
+</div>
+
   <div id="editor" contenteditable="true" class="editor"></div>
   <script src="java.js"></script>
 </body>
