@@ -1,41 +1,60 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>WordPad-like Editor</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Assignment Editor — WordPress Friendly</title>
+
   <link rel="stylesheet" href="style.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 </head>
 <body>
-  <h1 class="title">WordPress-Friendly Assignment Editor</h1>
-  <div class="toolbar">
-  <button data-command="bold"><b>B</b></button>
-  <button data-command="italic"><i>I</i></button>
-  <button data-command="underline"><u>U</u></button>
+  <div id="app" class="app">
+    <aside class="left-palette" aria-hidden="false">
+      <div class="brand">
+        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path fill="currentColor" d="M3 4h14v12H3z"></path></svg>
+        <h3>AssignCraft</h3>
+      </div>
 
-  <select data-command="formatBlock">
-    <option value="p">Paragraph</option>
-    <option value="h1">H1</option>
-    <option value="h2">H2</option>
-    <option value="h3">H3</option>
-    <option value="h4">H4</option>
-    <option value="h5">H5</option>
-    <option value="h6">H6</option>
-  </select>
+      <div class="meta">
+        <label>Title
+          <input id="doc-title" placeholder="My Assignment Title" />
+        </label>
+        <label>Author
+          <input id="doc-author" placeholder="Author name" />
+        </label>
+        <div class="file-actions">
+          <button id="export-doc" class="action">Export .doc</button>
+          <button id="export-pdf" class="action">Export PDF</button>
+        </div>
+      </div>
 
-  <!-- <select data-command="fontSize">
-    <option value="1">Small</option>
-    <option value="3">Normal</option>
-    <option value="5">Large</option>
-  </select> -->
+    </aside>
 
-  <select data-command="fontName">
-    <option value="Arial">Arial</option>
-    <option value="Georgia">Georgia</option>
-    <option value="Courier New">Courier</option>
-  </select>
-</div>
+    <main class="editor-panel">
+      <div class="ribbon" role="toolbar" aria-label="Editor Toolbar" id="toolbar"></div>
 
-  <div id="editor" contenteditable="true" class="editor"></div>
+      <section class="editor-wrap">
+        <div id="editor" class="editor" contenteditable="true" aria-label="Assignment editor" spellcheck="true">
+          <h1>Start your assignment...</h1>
+          <p>Type here — formatting, images, tables supported.</p>
+        </div>
+      </section>
+
+      <div class="bottom-row">
+        <div class="ops">
+          <button id="preview-btn" class="ghost">Preview</button>
+          <button id="copy-text" class="ghost">Copy text</button>
+          <button id="copy-html" class="ghost">Copy HTML</button>
+          <button id="clear-format" class="ghost">Clear</button>
+          <button id="reset-editor" class="ghost">Reset</button>
+        </div>
+        <div id="status" class="status">Ready</div>
+      </div>
+    </main>
+  </div>
+
   <script src="java.js"></script>
 </body>
 </html>
