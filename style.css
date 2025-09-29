@@ -1,180 +1,245 @@
-:root{
-  --bg:#0f1724;
-  --card:#0b1220;
-  --accent:#6ee7b7;
-  --muted:#94a3b8;
-  --glass: rgba(255,255,255,0.04);
-  --glass-2: rgba(255,255,255,0.02);
-  --glass-border: rgba(255,255,255,0.05);
+:root {
+  --bg-dark: #000000;
+  --card-dark: #111111;
+  --accent-dark: #6ee7b7;
+  --muted-dark: #999999;
+
+  --bg-light: #e0f0ff;
+  --card-light: #d0e7ff;
+  --accent-light: #0077ff;
+  --muted-light: #555555;
 }
 
-*{box-sizing:border-box}
-html,body{
-    height:100%;
-    margin:0;
-    font-family:Inter,system-ui,Arial,sans-serif;
-    background:linear-gradient(180deg,#071024 0%, #081227 100%); 
-    color:#e6eef6;}
+:root {
+  --bg-dark: #000000;
+  --card-dark: #111111;
+  --accent-dark: #6ee7b7;
+  --muted-dark: #999999;
+
+  --bg-light: #e0f0ff;
+  --card-light: #d0e7ff;
+  --accent-light: #0077ff;
+  --muted-light: #555555;
+}
+
+/* ---------- LIGHT MODE ---------- */
+body.light-mode {
+  background: var(--bg-light);
+  color: #000000;
+}
+
+body.light-mode .editor,
+body.light-mode .editor-wrap,
+body.light-mode .left-palette {
+  background: var(--card-light);
+  color: #000000;
+  border: 1px solid var(--accent-light);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+/* Toolbar elements in light mode */
+body.light-mode .toolbar button,
+body.light-mode .chip button,
+body.light-mode .chip select,
+body.light-mode .chip input[type="color"] {
+  background: var(--accent-light);
+  color: #ffffff;
+  border: 1px solid #005fcc;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+body.light-mode .toolbar button:hover,
+body.light-mode .chip button:hover {
+  background: #005fcc;
+}
+
+/* ---------- DARK MODE ---------- */
+body.dark-mode {
+  background: var(--bg-dark);
+  color: #ffffff;
+}
+
+body.dark-mode .editor,
+body.dark-mode .editor-wrap,
+body.dark-mode .left-palette {
+  background: var(--card-dark);
+  color: #ffffff;
+  border: 1px solid #222; /* border visible but subtle */
+  border-radius: 12px;
+  padding: 12px;
+}
+
+/* Toolbar elements in dark mode */
+body.dark-mode .toolbar button,
+body.dark-mode .chip button,
+body.dark-mode .chip select,
+body.dark-mode .chip input[type="color"] {
+  background: #1a1a1a;   /* Slightly lighter than body black */
+  color: #ffffff;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+body.dark-mode .toolbar button:hover,
+body.dark-mode .chip button:hover {
+  background: #333333;   /* Highlight when hover */
+}
+
+body.dark-mode .toolbar button:hover,
+body.dark-mode .chip button:hover {
+  background: #111111;
+}
+
+/* ----- GENERAL STYLING ----- */
 .app { 
-    display:flex; 
-    gap:24px;
-     max-width:1200px;
-      margin:28px auto; 
-      padding:18px; 
+  display: flex; 
+  gap: 24px;
+  max-width: 1200px;
+  margin: 28px auto; 
+  padding: 18px; 
 }
 
-.left-palette{
-  width:260px;
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border:1px solid var(--glass-border);
-   border-radius:12px; 
-   padding:16px;
-    display:flex;
-     flex-direction:column;
-      gap:14px;
+.left-palette {
+  width: 260px;
+  border-radius: 12px; 
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
   box-shadow: 0 8px 30px rgba(2,6,23,0.6);
 }
-.brand{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    color:var(--accent)}
-.brand h3{
-    margin:0;
-    font-size:18px}
-.meta label{
-    display:block;
-    font-size:13px;
-    color:var(--muted);
-     margin-bottom:6px;}
-.meta input{
-    width:100%;
-     padding:8px 10px;
-      border-radius:8px; 
-      border:1px solid var(--glass-border); 
-      background:transparent; 
-      color:inherit}
-.file-actions{
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-    margin-top:12px}
-.action{
-    padding:8px 10px;
-    border-radius:8px;
-    border:1px solid rgba(255,255,255,0.06);
-    background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
-     color:var(--accent);
-     cursor:pointer}
 
-/* Main editor panel */
-.editor-panel{
-    flex:1;
-     display:flex;
-      flex-direction:column; 
-      gap:12px;}
-.ribbon{
-    background:transparent;
-    padding:12px;
-    border-radius:12px;
-    border:1px solid var(--glass-border);
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    align-items:center;
-    box-shadow: 0 6px 18px rgba(2,6,23,0.5);}
-
-/* toolbar chips */
-.chip{
-    display:flex;
-    gap:6px;
-    align-items:center;
-    background:var(--glass);
-    padding:6px;
-    border-radius:8px;
-    border:1px solid rgba(255,255,255,0.03)}
-.chip button{
-    background:transparent;
-    border:0;
-    color:inherit;
-    padding:6px 8px;
-    border-radius:6px;
-    cursor:pointer}
-.chip select, .chip input[type=color]{
-    background:transparent;
-    border:0;
-    color:inherit;
-    padding:6px;
-    cursor:pointer}
-
-.editor-wrap{
-  border-radius:12px;
-   flex:1;
-    overflow:auto;
-     border:1px solid var(--glass-border);
-  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
-  padding:14px;
-  min-height:420px;
-}
-/* Scrollbar Styling */
-.editor::-webkit-scrollbar {
-  width: 10px;
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.editor::-webkit-scrollbar-thumb {
-  background: #bbb; /* light grey thumb */
+.brand h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.meta label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.meta input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px; 
+  border: 1px solid transparent; 
+  background: transparent; 
+}
+
+.file-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.action {
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.editor-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column; 
+  gap: 12px;
+}
+
+.ribbon {
+  background: transparent;
+  padding: 12px;
+  border-radius: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.chip {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.editor-wrap {
+  border-radius: 12px;
+  flex: 1;
+  overflow: auto;
+  padding: 14px;
+  min-height: 420px;
+}
+
+.editor {
+  min-height: 340px;
+  padding: 18px;
   border-radius: 10px;
+  outline: none;
 }
 
-.editor::-webkit-scrollbar-track {
-  background: #f1f1f1; /* light background */
-}
-/* Light mode (default) */
-body.light-mode {
-  background: #f8f9fa;
-  color: #000;
-}
+.editor h1, .editor h2, .editor h3 { margin: .25em 0; }
 
-body.light-mode .editor {
-  background: #fff;
-  color: #000;
+.bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
 }
 
-/* Dark mode */
-body.dark-mode {
-  background: #121212;
-  color: #fff;
+.ghost {
+  background:#ffffff;
+  border: 1px solid transparent;
+  padding: 7px 10px;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
-body.dark-mode .editor {
-  background: #1e1e1e;
-  color: #fff;
-  border: 1px solid #444;
+.status {
+  font-size: 13px;
 }
 
-/* Toolbar buttons adjust */
-body.dark-mode .toolbar button {
-  background: #333;
-  color: #fff;
+.editor table {
+  border-collapse: collapse;
+  width: auto;
+  resize: both;
+  overflow: auto; 
+  display: inline-block;
 }
 
-/* editable area */
-.editor{min-height:340px;padding:18px;border-radius:10px;background:linear-gradient(180deg, rgba(10,14,20,0.25), rgba(7,9,14,0.12)); color:#e9f3ff; outline:none}
-.editor h1, .editor h2, .editor h3{margin:.25em 0}
-
-/* bottom */
-.bottom-row{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
-.ghost{background:transparent;border:1px solid rgba(255,255,255,0.03);color:var(--muted);padding:7px 10px;border-radius:8px;cursor:pointer}
-.status{color:var(--muted);font-size:13px}
-
-/* responsive */
-@media (max-width:920px){
-  .app{flex-direction:column;margin:12px}
-  .left-palette{width:100%;order:2}
-  .editor-panel{order:1}
+.editor table td, 
+.editor table th {
+  border: 1px solid #333;
+  padding: 6px;
+  min-width: 40px;
 }
 
-/* small niceties for tables and images inside editor output */
-.editor table{border-collapse:collapse;width:100%}
-.editor table td, .editor table th{border:1px solid rgba(255,255,255,0.06);padding:8px}
-.editor img{max-width:100%;height:auto;border-radius:6px}
+.editor img {
+  max-width: 100%;
+  /* height: auto; */
+  /* resize: both; */
+  /* overflow: auto; */
+  /* display: inline-block; */
+}
+
+
+@media (max-width: 920px){
+  .app { flex-direction: column; margin: 12px; }
+  .left-palette { width: 100%; order: 2; }
+  .editor-panel { order: 1; }
+}
