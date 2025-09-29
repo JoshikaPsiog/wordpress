@@ -3,7 +3,6 @@ class Editor {
     this.el = document.getElementById(containerId);
     this.initialHTML = this.el.innerHTML;
   }
-
   exec(command, value = null){
     try {
       document.execCommand(command, false, value);
@@ -12,12 +11,10 @@ class Editor {
     }
     this.el.focus();
   }
-
   insertHTML(html){
     try {
       document.execCommand('insertHTML', false, html);
     } catch(e) {
-      // fallback insert via range
       const sel = window.getSelection();
       if (!sel.rangeCount) return;
       const range = sel.getRangeAt(0);
@@ -33,22 +30,18 @@ class Editor {
   setHTML(h){ this.el.innerHTML = h; }
   reset(){ this.setHTML(this.initialHTML); }
   clearFormatting(){
-    // remove inline styles and classes but keep tags
     const tmp = document.createElement('div');
     tmp.innerHTML = this.getHTML();
     tmp.querySelectorAll('*').forEach(n => { n.removeAttribute('style'); n.removeAttribute('class'); });
     this.setHTML(tmp.innerHTML);
   }
 }
-
-/* Exporter class: Word and PDF */
 class Exporter {
   constructor(editor, titleEl, authorEl){
     this.editor = editor;
     this.titleEl = titleEl;
     this.authorEl = authorEl;
   }
-
   wrapHTML(content) {
     const title = this.escape(this.titleEl.value || 'Untitled');
     const author = this.escape(this.authorEl.value || 'Anonymous');
@@ -59,21 +52,16 @@ class Exporter {
       </head><body><header><h1>${title}</h1><p><em>Author: ${author}</em></p><hr/></header>${content}</body></html>
     `;
   }
-
   escape(s){ return String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
-
   toDoc(filename){
     filename = filename || (this.titleEl.value ? this.titleEl.value.replace(/\s+/g,'_')+'.doc' : 'document.doc');
     const html = this.wrapHTML(this.editor.getHTML());
-    // Word accepts HTML in .doc container
     const blob = new Blob([html], { type: 'application/msword' });
     this.downloadBlob(blob, filename);
   }
-
   toPDF(filename){
     filename = filename || (this.titleEl.value ? this.titleEl.value.replace(/\s+/g,'_')+'.pdf' : 'document.pdf');
     const content = this.wrapHTML(this.editor.getHTML());
-    // create temporary element for html2pdf
     const temp = document.createElement('div');
     temp.style.padding = '12px';
     temp.innerHTML = content;
@@ -81,7 +69,6 @@ class Exporter {
     const opt = { margin:0.5, filename, image:{type:'jpeg',quality:0.98}, html2canvas:{scale:2}, jsPDF:{unit:'in',format:'a4',orientation:'portrait'} };
     html2pdf().set(opt).from(temp).save().then(()=> temp.remove()).catch(()=> temp.remove());
   }
-
   downloadBlob(blob, filename){
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -89,8 +76,6 @@ class Exporter {
     setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 1500);
   }
 }
-
-/* Toolbar class: builds UI and wires events */
 class Toolbar {
   constructor(containerId, editor, exporter){
     this.container = document.getElementById(containerId);
@@ -99,8 +84,6 @@ class Toolbar {
     this.build();
     this.bindKeyboardShortcuts();
   }
-
-  // tiny helper to create a chip (group)
   chip(children = []) {
     const div = document.createElement('div');
     div.className = 'chip';
@@ -108,14 +91,12 @@ class Toolbar {
     this.container.appendChild(div);
     return div;
   }
-
   makeButton(text, title, onClick) {
     const btn = document.createElement('button');
     btn.type='button'; btn.title = title || text; btn.innerHTML = text;
     btn.addEventListener('click', onClick);
     return btn;
   }
-
   makeSelect(options = [], onChange) {
     const sel = document.createElement('select');
     options.forEach(o => {
@@ -124,23 +105,35 @@ class Toolbar {
     sel.addEventListener('change', e => onChange(e.target.value));
     return sel;
   }
-
   build() {
-    // Format group
     const bold = this.makeButton('<b>B</b>','Bold', ()=> this.editor.exec('bold'));
     const italic = this.makeButton('<i>I</i>','Italic', ()=> this.editor.exec('italic'));
     const underline = this.makeButton('<u>U</u>','Underline', ()=> this.editor.exec('underline'));
     this.chip([bold, italic, underline]);
 
-    // Headings & font
     const headingSel = this.makeSelect([{value:'p',label:'Paragraph'},{value:'h1',label:'H1'},{value:'h2',label:'H2'},{value:'h3',label:'H3'}], v=>{
       this.editor.exec('formatBlock', v === 'p' ? 'p' : v);
     });
     const fontSel = this.makeSelect([{value:'Arial',label:'Arial'},{value:'Georgia',label:'Georgia'},{value:'Courier New',label:'Courier'}], v=> this.editor.exec('fontName', v));
-    // const sizeSel = this.makeSelect([{value:2,label:'S'},{value:3,label:'M'},{value:4,label:'L'},{value:5,label:'XL'}], v=> this.editor.exec('fontSize', v));
-    this.chip([headingSel, fontSel, sizeSel]);
-
-    // alignment & lists
+     const sizeSel = this.makeSelect(
+  [
+    {value:'12px',label:'12'},
+    {value:'16px',label:'16'},
+    {value:'20px',label:'20'},
+    {value:'24px',label:'24'},
+    {value:'28px',label:'28'},
+    {value:'32px',label:'32'},
+    {value:'36px',label:'36'}
+  ],
+  v => {
+    this.editor.exec('fontSize', 7); 
+    const fonts = this.editorEl.querySelectorAll("font[size='7']");
+    fonts.forEach(f => {
+      f.removeAttribute("size");
+      f.style.fontSize = v;
+    });
+  }
+);
     const left = this.makeButton('⟵','Left', ()=> this.editor.exec('justifyLeft'));
     const center = this.makeButton('⇄','Center', ()=> this.editor.exec('justifyCenter'));
     const right = this.makeButton('⟶','Right', ()=> this.editor.exec('justifyRight'));
@@ -150,8 +143,16 @@ class Toolbar {
     const indent = this.makeButton('→','Indent', ()=> this.editor.exec('indent'));
     const outdent = this.makeButton('←','Outdent', ()=> this.editor.exec('outdent'));
     this.chip([left, center, right, full, ol, ul, indent, outdent]);
-
-    // colors
+    document.getElementById("toggleTheme").addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+  document.body.classList.toggle("light-mode");
+  let btn = document.getElementById("toggleTheme");
+  if (document.body.classList.contains("dark-mode")) {
+    btn.textContent = "☀️ Light Mode";
+  } else {
+    btn.textContent = "🌙 Dark Mode";
+  }
+});
     const colorInput = document.createElement('input'); colorInput.type='color'; colorInput.title='Text color';
     colorInput.addEventListener('input', e=> this.editor.exec('foreColor', e.target.value));
     const highlight = document.createElement('input'); highlight.type='color'; highlight.title='Highlight';
@@ -159,31 +160,24 @@ class Toolbar {
       try { this.editor.exec('hiliteColor', e.target.value); } catch(e){ this.editor.exec('backColor', e.target.value); }
     });
     this.chip([colorInput, highlight]);
-
-    // insert options
     const linkBtn = this.makeButton('🔗','Insert link', ()=> this.insertLink());
     const imgBtn = this.makeButton('🖼️','Insert image', ()=> this.insertImage());
     const tableBtn = this.makeButton('▦','Insert table', ()=> this.insertTable());
     this.chip([linkBtn, imgBtn, tableBtn]);
 
-    // small utilities inside toolbar
     const copyTextBtn = this.makeButton('Txt','Copy text', ()=> navigator.clipboard.writeText(this.editor.getText()).then(()=> this.showStatus('Text copied')));
     const copyHtmlBtn = this.makeButton('< />','Copy HTML', ()=> navigator.clipboard.writeText(this.editor.getHTML()).then(()=> this.showStatus('HTML copied')));
     const previewBtn = this.makeButton('👁','Preview', ()=> this.preview());
     const clearBtn = this.makeButton('✖','Clear formatting', ()=> { this.editor.clearFormatting(); this.showStatus('Formatting cleared'); });
     this.chip([copyTextBtn, copyHtmlBtn, previewBtn, clearBtn]);
-
-    // small hint
     const hint = document.createElement('div'); hint.style.color = 'var(--muted)'; hint.style.paddingLeft = '8px'; hint.style.fontSize = '12px';
-    hint.textContent = '';
+    hint.textContent = 'Shortcuts: Ctrl/Cmd + B / I / U';
     this.container.appendChild(hint);
   }
-
   insertLink(){
     const url = prompt('Enter URL (https://...)');
     if(url) this.editor.exec('createLink', url);
   }
-
   insertImage(){
     const url = prompt('Image URL (leave blank to upload from device)');
     if(url){
@@ -200,7 +194,6 @@ class Toolbar {
       input.click();
     }
   }
-
   insertTable(){
     const rows = parseInt(prompt('Rows', '2')) || 2;
     const cols = parseInt(prompt('Cols', '2')) || 2;
@@ -213,7 +206,6 @@ class Toolbar {
     html += '</table><p></p>';
     this.editor.insertHTML(html);
   }
-
   preview(){
     const w = window.open('','_blank');
     const content = this.editor.getHTML();
@@ -232,53 +224,27 @@ class Toolbar {
       }
     });
   }
-
   showStatus(msg){
     const st = document.getElementById('status');
     st.textContent = msg;
     setTimeout(()=> st.textContent = 'Ready', 2200);
   }
 }
-
-document.getElementById("toggleTheme").addEventListener("click", () => {
-
-  document.body.classList.toggle("dark-mode");
-  document.body.classList.toggle("light-mode");
-  let btn = document.getElementById("toggleTheme");
-  if (document.body.classList.contains("dark-mode")) {
-    btn.textContent = "☀️ Light Mode";
-  } else {
-    btn.textContent = "🌙 Dark Mode";
-  }
-});
-
 document.addEventListener('DOMContentLoaded', () => {
   const editor = new Editor('editor');
-  const exporter = new Exporter(editor, document.getElementById('doc-title'),
-   document.getElementById('doc-author'));
+  const exporter = new Exporter(editor, document.getElementById('doc-title'), document.getElementById('doc-author'));
   const toolbar = new Toolbar('toolbar', editor, exporter);
-
-
   document.getElementById('export-doc').addEventListener('click', ()=> exporter.toDoc());
   document.getElementById('export-pdf').addEventListener('click', ()=> exporter.toPDF());
-
   document.getElementById('preview-btn').addEventListener('click', ()=> toolbar.preview());
-  document.getElementById('copy-text').addEventListener('click', ()=>
-     navigator.clipboard.writeText(editor.getText()).then(()=> toolbar.showStatus('Text copied')));
-  document.getElementById('copy-html').addEventListener('click', ()=> 
-    navigator.clipboard.writeText(editor.getHTML()).then(()=> toolbar.showStatus('HTML copied')));
-  document.getElementById('clear-format').addEventListener('click', ()=> 
-    { editor.clearFormatting(); toolbar.showStatus('Formatting cleared'); });
-  document.getElementById('reset-editor').addEventListener('click', ()=> 
-    { if(confirm('Reset editor content?')) { editor.reset(); toolbar.showStatus('Reset'); } });
-
-  // autosave example (localStorage)
+  document.getElementById('copy-text').addEventListener('click', ()=> navigator.clipboard.writeText(editor.getText()).then(()=> toolbar.showStatus('Text copied')));
+  document.getElementById('copy-html').addEventListener('click', ()=> navigator.clipboard.writeText(editor.getHTML()).then(()=> toolbar.showStatus('HTML copied')));
+  document.getElementById('clear-format').addEventListener('click', ()=> { editor.clearFormatting(); toolbar.showStatus('Formatting cleared'); });
+  document.getElementById('reset-editor').addEventListener('click', ()=> { if(confirm('Reset editor content?')) { editor.reset(); toolbar.showStatus('Reset'); } });
   setInterval(()=> {
     localStorage.setItem('assigncraft-snapshot', editor.getHTML());
     document.getElementById('status').textContent = 'Autosaved ' + new Date().toLocaleTimeString();
   }, 15000);
-
   const snap = localStorage.getItem('assigncraft-snapshot');
   if(snap) editor.setHTML(snap);
-
 });
