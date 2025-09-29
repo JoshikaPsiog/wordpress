@@ -3,7 +3,6 @@ class Editor {
     this.el = document.getElementById(containerId);
     this.initialHTML = this.el.innerHTML;
   }
-
   exec(command, value = null){
     try { document.execCommand(command, false, value); }
     catch(err){ console.warn('execCommand failed', command, err); }
