@@ -99,6 +99,27 @@ toPDF(filename){
     setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 1500);
   }
 }
+const pageBreakBtn = document.getElementById("insert-page-break");
+const editor = document.getElementById("editor");
+
+pageBreakBtn.addEventListener("click", () => {
+  const pageBreak = document.createElement("div");
+  pageBreak.className = "page-break";
+  const sel = window.getSelection();
+  if (sel.rangeCount > 0) {
+    const range = sel.getRangeAt(0);
+    range.collapse(false);
+    range.insertNode(pageBreak);
+    range.setStartAfter(pageBreak);
+    range.setEndAfter(pageBreak);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  } else {
+    editor.appendChild(pageBreak);
+  }
+});
+
+
 
 class Toolbar {
   constructor(containerId, editor, exporter){
@@ -206,7 +227,7 @@ class Toolbar {
     const clearBtn=this.makeButton('✖','Clear formatting', ()=> { this.editor.clearFormatting(); this.showStatus('Formatting cleared'); });
     this.chip([copyTextBtn, copyHtmlBtn, previewBtn, clearBtn]);
 
-    const hint = document.createElement('div'); hint.style.color='var(--muted)'; hint.style.paddingLeft='8px'; hint.style.fontSize='12px';
+    const hint = document.createElement('div'); hint.style.color='var(--muted)'; hint.style.paddingLeft='8px'; hint.style.fontSize='12px';hint.style.color = 'darkblue';
     hint.textContent = 'Shortcuts: Ctrl/Cmd + B / I / U';
     this.container.appendChild(hint);
   }
@@ -275,25 +296,38 @@ insertImage(){
     setTimeout(()=> st.textContent='Ready',2200);
   }
 }
+document.addEventListener('DOMContentLoaded', () => {
+  const editor = new Editor('editor');
+  const exporter = new Exporter(editor, document.getElementById('doc-title'), document.getElementById('doc-author'));
+  const toolbar = new Toolbar('toolbar', editor, exporter);
 
-document.addEventListener('DOMContentLoaded', ()=>{
-  const editor=new Editor('editor');
-  const exporter=new Exporter(editor, document.getElementById('doc-title'), document.getElementById('doc-author'));
-  const toolbar=new Toolbar('toolbar', editor, exporter);
+  // Restore snapshot if exists
+  const snap = localStorage.getItem('assigncraft-snapshot');
+  if (snap) editor.setHTML(snap);
 
-document.getElementById('export-doc').addEventListener('click', ()=> exporter.toDoc());
-  document.getElementById('export-pdf').addEventListener('click', ()=> exporter.toPDF());
- document.getElementById('preview-btn').addEventListener('click', ()=> toolbar.preview());
-  document.getElementById('copy-text').addEventListener('click', ()=> navigator.clipboard.writeText(editor.getText()).then(()=> toolbar.showStatus('Text copied')));
-document.getElementById('copy-html').addEventListener('click', ()=> navigator.clipboard.writeText(editor.getHTML()).then(()=> toolbar.showStatus('HTML copied')));
-  document.getElementById('clear-format').addEventListener('click', ()=> { editor.clearFormatting(); toolbar.showStatus('Formatting cleared'); });
-  document.getElementById('reset-editor').addEventListener('click', ()=> { if(confirm('Reset editor content?')) { editor.reset(); toolbar.showStatus('Reset'); } });
+  const statusEl = document.getElementById('status');
 
-  setInterval(()=> {
+  // Auto-save function
+  function autoSave() {
     localStorage.setItem('assigncraft-snapshot', editor.getHTML());
-    document.getElementById('status').textContent = 'Autosaved ' + new Date().toLocaleTimeString();
-  }, 15000);
+    statusEl.textContent = 'Autosaved ' + new Date().toLocaleTimeString();
+  }
 
-  const snap=localStorage.getItem('assigncraft-snapshot');
-  if(snap) editor.setHTML(snap);
+  // Save every 15 seconds
+  setInterval(autoSave, 15000);
+
+  // Save on every input/change immediately
+  editor.el.addEventListener('input', autoSave);
+  document.getElementById('doc-title').addEventListener('input', autoSave);
+  document.getElementById('doc-author').addEventListener('input', autoSave);
+
+  // Existing event listeners
+  document.getElementById('export-doc').addEventListener('click', () => exporter.toDoc());
+  document.getElementById('export-pdf').addEventListener('click', () => exporter.toPDF());
+  document.getElementById('preview-btn').addEventListener('click', () => toolbar.preview());
+  document.getElementById('copy-text').addEventListener('click', () => navigator.clipboard.writeText(editor.getText()).then(() => toolbar.showStatus('Text copied')));
+  document.getElementById('copy-html').addEventListener('click', () => navigator.clipboard.writeText(editor.getHTML()).then(() => toolbar.showStatus('HTML copied')));
+  document.getElementById('clear-format').addEventListener('click', () => { editor.clearFormatting(); toolbar.showStatus('Formatting cleared'); });
+  document.getElementById('reset-editor').addEventListener('click', () => { if (confirm('Reset editor content?')) { editor.reset(); toolbar.showStatus('Reset'); } });
 });
+

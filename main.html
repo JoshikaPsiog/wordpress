@@ -9,11 +9,15 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 </head>
-<body>
+<body class="light-mode">
   <div id="app" class="app">
+
+    <!-- ===== Left Sidebar (Palette) ===== -->
     <aside class="left-palette" aria-hidden="false">
       <div class="brand">
-        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path fill="currentColor" d="M3 4h14v12H3z"></path></svg>
+        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+          <path fill="currentColor" d="M3 4h14v12H3z"></path>
+        </svg>
         <h3>AssignCraft</h3>
       </div>
 
@@ -29,28 +33,31 @@
           <button id="export-pdf" class="action">Export PDF</button>
         </div>
       </div>
-
     </aside>
 
+    <!-- ===== Right Main Panel ===== -->
     <main class="editor-panel">
+
+      <!-- Ribbon (fixed top) -->
       <div class="ribbon" role="toolbar" aria-label="Editor Toolbar" id="toolbar">
+        <!-- toolbar buttons will be inserted here -->
       </div>
 
-      <section class="editor-wrap" >
+      <!-- Editor (scrollable only here) -->
+      <section class="editor-wrap">
         <div id="editor" class="editor" contenteditable="true" aria-label="Assignment editor" spellcheck="true">
           <h1>Start your assignment...</h1>
           <p>Type here — formatting, images, tables supported.</p>
         </div>
       </section>
 
+      <!-- Bottom row (fixed bottom) -->
       <div class="bottom-row">
         <div class="ops">
-          <button id="preview-btn" class="ghost">Preview</button>
-          <button id="copy-text" class="ghost">Copy text</button>
-          <button id="copy-html" class="ghost">Copy HTML</button>
-          <button id="clear-format" class="ghost">Clear</button>
+            <button id="insert-page-break" class="ghost">Page Break</button>
           <button id="reset-editor" class="ghost">Reset</button>
-              <button id="toggleTheme">🌙 Dark Mode</button>
+          
+          <button id="toggleTheme" class="ghost">🌙 Dark Mode</button>
         </div>
         <div id="status" class="status">Ready</div>
       </div>

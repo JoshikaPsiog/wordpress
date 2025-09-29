@@ -10,18 +10,6 @@
   --muted-light: #555555;
 }
 
-:root {
-  --bg-dark: #000000;
-  --card-dark: #111111;
-  --accent-dark: #6ee7b7;
-  --muted-dark: #999999;
-
-  --bg-light: #e0f0ff;
-  --card-light: #d0e7ff;
-  --accent-light: #0077ff;
-  --muted-light: #555555;
-}
-
 body.light-mode {
   background: var(--bg-light);
   color: #000000;
@@ -37,23 +25,10 @@ body.light-mode .left-palette {
   padding: 12px;
 }
 
-body.light-mode .toolbar button,
-body.light-mode .chip button,
-body.light-mode .chip select,
-body.light-mode .chip input[type="color"] {
-  background: var(--accent-light);
-  color: #ffffff;
-  border: 1px solid #005fcc;
-  border-radius: 6px;
-  padding: 6px 10px;
-  cursor: pointer;
-}
-
 body.light-mode .toolbar button:hover,
 body.light-mode .chip button:hover {
   background: #005fcc;
 }
-
 
 body.dark-mode {
   background: var(--bg-dark);
@@ -70,46 +45,45 @@ body.dark-mode .left-palette {
   padding: 12px;
 }
 
-
 body.dark-mode .toolbar button,
 body.dark-mode .chip button,
 body.dark-mode .chip select,
 body.dark-mode .chip input[type="color"] {
   background: #1a1a1a;   
   color: #ffffff;
-  border: 1px solid #444;
+  border: 1px solid goldenrod;   /* golden border */
   border-radius: 6px;
   padding: 6px 10px;
   cursor: pointer;
 }
 
 body.dark-mode .toolbar button:hover,
-body.dark-mode .chip button:hover {
-    position: fixed;
-  background: #333333;  
+body.dark-mode .chip button:hover,
+body.dark-mode .chip select:hover,
+body.dark-mode .chip input[type="color"]:hover {
+  background: #111111;  
+  border: 1px solid goldenrod;   /* maintain golden border on hover */
 }
 
-body.dark-mode .toolbar button:hover,
-body.dark-mode .chip button:hover {
-  background: #111111;
-}
+/* ==== Layout ==== */
 .app { 
   display: flex; 
+  height: 100vh; /* full height */
   gap: 24px;
   max-width: 1200px;
-  margin: 28px auto; 
+  margin: 0 auto; 
   padding: 18px; 
 }
 
 .left-palette {
   width: 260px;
-  /* position: f; */
   border-radius: 12px; 
   padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 14px;
   box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+  flex-shrink: 0; /* don’t shrink */
 }
 
 .brand {
@@ -130,11 +104,12 @@ body.dark-mode .chip button:hover {
 }
 
 .meta input {
-  width: 100%;
-  padding: 8px 10px;
-  border-radius: 8px; 
-  border: 1px solid transparent; 
-  background: transparent; 
+  width: 97%;
+  padding: 8px 8px;
+  border-radius: 5px; 
+  border: 1px solid goldenrod;
+  background: transparent;
+  color: inherit;
 }
 
 .file-actions {
@@ -150,50 +125,49 @@ body.dark-mode .chip button:hover {
   cursor: pointer;
 }
 
+/* Right side panel */
 .editor-panel {
   flex: 1;
   display: flex;
-  flex-direction: column; 
-  gap: 12px;
-  background: #fff; 
-  border-radius: 8px; 
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); 
-  padding: 16px; 
+  flex-direction: column;
+  gap: 16px; /* slightly more space between children */
+  background: #ffffff; 
+  border-radius: 1px; /* smoother, more rounded corners */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* softer, slightly deeper shadow */
+  padding: 10px; /* more breathing room */
+  overflow: hidden; /* only editor scrolls */
+  transition: all 0.3s ease; /* subtle transition for hover effects */
 }
 
+/* Optional: subtle hover effect for a premium look */
+.editor-panel:hover {
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Ribbon fixed at top of panel */
 .ribbon {
-  background: #ffff;
-  /* position: fixed; */
+  flex-shrink: 0;
+  background: #fff;
   padding: 10px;
   border-radius: 200px;
-  border-color:#000 ;
+  border: 1px solid #000;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
 }
 
-.chip {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  padding: 6px;
-  border-radius: 8px;
-  border: 1px solid transparent;
-}
-
+/* Editor scrolls */
 .editor-wrap {
   border-radius: 12px;
   flex: 1;
-  overflow: auto;
+  overflow-y: auto;
   padding: 14px;
   min-height: 420px;
-
   background: #fff;       
   border: 2px solid #000;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
 }
-
 
 .editor {
   min-height: 340px;
@@ -202,9 +176,13 @@ body.dark-mode .chip button:hover {
   outline: none;
 }
 
-.editor h1, .editor h2, .editor h3 { margin: .25em 0; }
+.editor h1, .editor h2, .editor h3 { 
+  margin: .25em 0; 
+}
 
+/* Bottom row fixed */
 .bottom-row {
+  flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -221,7 +199,39 @@ body.dark-mode .chip button:hover {
 
 .status {
   font-size: 13px;
+  color: darkblue;
 }
+
+/* Chip items with golden border */
+/* Chip container flex gap */
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;   /* minimal spacing between boxes, adjust as needed */
+  padding: 6px;
+  border-radius: 8px;
+}
+
+/* Chip items with golden border */
+.chip button,
+.chip select,
+.chip input[type="color"] {
+  border: 1px solid goldenrod;
+  border-radius: 6px;
+  padding: 6px 10px;
+  background: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Hover state keeps golden border */
+.chip button:hover,
+.chip select:hover,
+.chip input[type="color"]:hover {
+  border: 2px solid goldenrod;
+  background: inherit;
+}
+
 
 .editor table {
   border-collapse: collapse;
@@ -237,10 +247,33 @@ body.dark-mode .chip button:hover {
   padding: 6px;
   min-width: 40px;
 }
+/* Visual page break inside editor */
+/* Forces a page break in PDF */
+.page-break {
+  page-break-before: always; /* new page before this element */
+  page-break-after: always;  /* new page after this element */
+  break-before: page;
+  break-after: page;
+
+  border-top: 2px dashed goldenrod; /* visible in editor */
+  margin: 16px 0;
+  text-align: center;
+  position: relative;
+}
+
+.page-break::after {
+  content: "Page Break";
+  font-size: 10px;
+  color: goldenrod;
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+}
 
 
 @media (max-width: 920px){
-  .app { flex-direction: column; margin: 12px; }
+  .app { flex-direction: column; margin: 12px; height: auto; }
   .left-palette { width: 100%; order: 2; }
   .editor-panel { order: 1; }
 }
