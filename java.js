@@ -168,7 +168,6 @@ class Toolbar {
 
     this.chip([headingSel, fontSel, sizeSel]);
 
-    // Alignment & lists
     const left=this.makeButton('⟵','Left',()=>this.editor.exec('justifyLeft'));
     const center=this.makeButton('⇄','Center',()=>this.editor.exec('justifyCenter'));
     const right=this.makeButton('⟶','Right',()=>this.editor.exec('justifyRight'));
@@ -179,7 +178,6 @@ class Toolbar {
     const outdent=this.makeButton('←','Outdent',()=>this.editor.exec('outdent'));
     this.chip([left, center, right, full, ol, ul, indent, outdent]);
 
-    // Theme toggle
     document.getElementById("toggleTheme").addEventListener("click", ()=>{
       document.body.classList.toggle("dark-mode");
       document.body.classList.toggle("light-mode");
@@ -187,7 +185,6 @@ class Toolbar {
       btn.textContent = document.body.classList.contains("dark-mode") ? "☀️ Light Mode" : "🌙 Dark Mode";
     });
 
-    // Colors
     const colorInput=document.createElement('input'); colorInput.type='color'; colorInput.title='Text color';
     colorInput.addEventListener('input', e=> this.editor.exec('foreColor', e.target.value));
     const highlight=document.createElement('input'); highlight.type='color'; highlight.title='Highlight';
@@ -197,20 +194,18 @@ class Toolbar {
     });
     this.chip([colorInput, highlight]);
 
-    // Insert link/image/table
+
     const linkBtn=this.makeButton('🔗','Insert link', ()=> this.insertLink());
     const imgBtn=this.makeButton('🖼️','Insert image', ()=> this.insertImage());
     const tableBtn=this.makeButton('▦','Insert table', ()=> this.insertTable());
     this.chip([linkBtn, imgBtn, tableBtn]);
 
-    // Copy/preview/clear
     const copyTextBtn=this.makeButton('Txt','Copy text', ()=> navigator.clipboard.writeText(this.editor.getText()).then(()=> this.showStatus('Text copied')));
     const copyHtmlBtn=this.makeButton('< />','Copy HTML', ()=> navigator.clipboard.writeText(this.editor.getHTML()).then(()=> this.showStatus('HTML copied')));
     const previewBtn=this.makeButton('👁','Preview', ()=> this.preview());
     const clearBtn=this.makeButton('✖','Clear formatting', ()=> { this.editor.clearFormatting(); this.showStatus('Formatting cleared'); });
     this.chip([copyTextBtn, copyHtmlBtn, previewBtn, clearBtn]);
 
-    // Shortcut hint
     const hint = document.createElement('div'); hint.style.color='var(--muted)'; hint.style.paddingLeft='8px'; hint.style.fontSize='12px';
     hint.textContent = 'Shortcuts: Ctrl/Cmd + B / I / U';
     this.container.appendChild(hint);
@@ -243,10 +238,6 @@ insertImage(){
   };
   input.click();
 }
-
-
-
-
 
   insertTable(){
     const rows=parseInt(prompt('Rows','2'))||2;
@@ -290,15 +281,14 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const exporter=new Exporter(editor, document.getElementById('doc-title'), document.getElementById('doc-author'));
   const toolbar=new Toolbar('toolbar', editor, exporter);
 
-  document.getElementById('export-doc').addEventListener('click', ()=> exporter.toDoc());
+document.getElementById('export-doc').addEventListener('click', ()=> exporter.toDoc());
   document.getElementById('export-pdf').addEventListener('click', ()=> exporter.toPDF());
-  document.getElementById('preview-btn').addEventListener('click', ()=> toolbar.preview());
+ document.getElementById('preview-btn').addEventListener('click', ()=> toolbar.preview());
   document.getElementById('copy-text').addEventListener('click', ()=> navigator.clipboard.writeText(editor.getText()).then(()=> toolbar.showStatus('Text copied')));
-  document.getElementById('copy-html').addEventListener('click', ()=> navigator.clipboard.writeText(editor.getHTML()).then(()=> toolbar.showStatus('HTML copied')));
+document.getElementById('copy-html').addEventListener('click', ()=> navigator.clipboard.writeText(editor.getHTML()).then(()=> toolbar.showStatus('HTML copied')));
   document.getElementById('clear-format').addEventListener('click', ()=> { editor.clearFormatting(); toolbar.showStatus('Formatting cleared'); });
   document.getElementById('reset-editor').addEventListener('click', ()=> { if(confirm('Reset editor content?')) { editor.reset(); toolbar.showStatus('Reset'); } });
 
-  // Autosave
   setInterval(()=> {
     localStorage.setItem('assigncraft-snapshot', editor.getHTML());
     document.getElementById('status').textContent = 'Autosaved ' + new Date().toLocaleTimeString();
