@@ -25,8 +25,9 @@ class Editor {
   getHTML(){ return this.el.innerHTML; }
   getText(){ return this.el.innerText; }
   setHTML(h){ this.el.innerHTML = h; }
-  reset(){ this.setHTML(this.initialHTML); }
-
+reset(){
+  this.setHTML(''); 
+}
   clearFormatting(){
     const tmp = document.createElement('div');
     tmp.innerHTML = this.getHTML();
@@ -34,14 +35,12 @@ class Editor {
     this.setHTML(tmp.innerHTML);
   }
 }
-
 class Exporter {
   constructor(editor, titleEl, authorEl){
     this.editor = editor;
     this.titleEl = titleEl;
     this.authorEl = authorEl;
   }
-
   wrapHTML(content){
     const title = this.escape(this.titleEl.value || 'Untitled');
     const author = this.escape(this.authorEl.value || 'Anonymous');
@@ -53,7 +52,6 @@ class Exporter {
       </head><body><header><h1>${title}</h1><p><em>Author: ${author}</em></p><hr/></header>${content}</body></html>
     `;
   }
-
   escape(s){ return String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
 
   toDoc(filename){
@@ -71,7 +69,6 @@ toPDF(filename){
   temp.innerHTML = content;
   document.body.appendChild(temp);
 
-  // Wait for all images to load
   const images = temp.querySelectorAll('img');
   let loadedCount = 0;
   if(images.length===0){ savePDF(); }
@@ -151,18 +148,17 @@ class Toolbar {
   }
 
   build(){
-    // Text styles
+ 
     const bold = this.makeButton('<b>B</b>','Bold', ()=> this.editor.exec('bold'));
     const italic = this.makeButton('<i>I</i>','Italic', ()=> this.editor.exec('italic'));
     const underline = this.makeButton('<u>U</u>','Underline', ()=> this.editor.exec('underline'));
     this.chip([bold, italic, underline]);
 
-    // Headings
     const headingSel = this.makeSelect([{value:'p',label:'Paragraph'},{value:'h1',label:'H1'},{value:'h2',label:'H2'},{value:'h3',label:'H3'}],
       v=> this.editor.exec('formatBlock', v==='p'?'p':v)
     );
 
-    // Font family
+
     const fontSel = this.makeSelect([
       {value:'Arial',label:'Arial'},
       {value:'Georgia',label:'Georgia'},
@@ -171,7 +167,7 @@ class Toolbar {
       {value:'Tahoma',label:'Tahoma'}
     ], v=> this.editor.exec('fontName', v));
 
-    // Font size with px fix
+
     const sizeSel = this.makeSelect([
       {value:'12',label:'12'},
       {value:'16',label:'16'},
@@ -300,33 +296,36 @@ document.addEventListener('DOMContentLoaded', () => {
   const exporter = new Exporter(editor, document.getElementById('doc-title'), document.getElementById('doc-author'));
   const toolbar = new Toolbar('toolbar', editor, exporter);
 
-  // Restore snapshot if exists
   const snap = localStorage.getItem('assigncraft-snapshot');
   if (snap) editor.setHTML(snap);
 
   const statusEl = document.getElementById('status');
 
-  // Auto-save function
+
   function autoSave() {
     localStorage.setItem('assigncraft-snapshot', editor.getHTML());
     statusEl.textContent = 'Autosaved ' + new Date().toLocaleTimeString();
   }
 
-  // Save every 15 seconds
   setInterval(autoSave, 15000);
 
-  // Save on every input/change immediately
+  
   editor.el.addEventListener('input', autoSave);
   document.getElementById('doc-title').addEventListener('input', autoSave);
   document.getElementById('doc-author').addEventListener('input', autoSave);
 
-  // Existing event listeners
+
   document.getElementById('export-doc').addEventListener('click', () => exporter.toDoc());
   document.getElementById('export-pdf').addEventListener('click', () => exporter.toPDF());
   document.getElementById('preview-btn').addEventListener('click', () => toolbar.preview());
   document.getElementById('copy-text').addEventListener('click', () => navigator.clipboard.writeText(editor.getText()).then(() => toolbar.showStatus('Text copied')));
   document.getElementById('copy-html').addEventListener('click', () => navigator.clipboard.writeText(editor.getHTML()).then(() => toolbar.showStatus('HTML copied')));
   document.getElementById('clear-format').addEventListener('click', () => { editor.clearFormatting(); toolbar.showStatus('Formatting cleared'); });
-  document.getElementById('reset-editor').addEventListener('click', () => { if (confirm('Reset editor content?')) { editor.reset(); toolbar.showStatus('Reset'); } });
+  document.getElementById('reset-editor').addEventListener('click', () =>
+     { 
+        if (confirm('Reset editor content?'))
+             { editor.reset(); toolbar.showStatus('Reset');
+
+              } });
 });
 

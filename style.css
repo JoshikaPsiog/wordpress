@@ -62,13 +62,13 @@ body.dark-mode .chip button:hover,
 body.dark-mode .chip select:hover,
 body.dark-mode .chip input[type="color"]:hover {
   background: #111111;  
-  border: 1px solid goldenrod;   /* maintain golden border on hover */
+  border: 1px solid goldenrod;   
 }
 
-/* ==== Layout ==== */
+
 .app { 
   display: flex; 
-  height: 100vh; /* full height */
+  height: 100vh; 
   gap: 24px;
   max-width: 1200px;
   margin: 0 auto; 
@@ -83,7 +83,7 @@ body.dark-mode .chip input[type="color"]:hover {
   flex-direction: column;
   gap: 14px;
   box-shadow: 0 8px 30px rgba(2,6,23,0.6);
-  flex-shrink: 0; /* don’t shrink */
+  flex-shrink: 0; 
 }
 
 .brand {
@@ -125,26 +125,23 @@ body.dark-mode .chip input[type="color"]:hover {
   cursor: pointer;
 }
 
-/* Right side panel */
 .editor-panel {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 16px; /* slightly more space between children */
+  gap: 16px; 
   background: #ffffff; 
-  border-radius: 1px; /* smoother, more rounded corners */
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* softer, slightly deeper shadow */
-  padding: 10px; /* more breathing room */
-  overflow: hidden; /* only editor scrolls */
-  transition: all 0.3s ease; /* subtle transition for hover effects */
+  border-radius: 1px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  padding: 10px; 
+  overflow: hidden; 
+  transition: all 0.3s ease; 
 }
 
-/* Optional: subtle hover effect for a premium look */
 .editor-panel:hover {
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
 }
 
-/* Ribbon fixed at top of panel */
 .ribbon {
   flex-shrink: 0;
   background: #fff;
@@ -157,7 +154,6 @@ body.dark-mode .chip input[type="color"]:hover {
   align-items: center;
 }
 
-/* Editor scrolls */
 .editor-wrap {
   border-radius: 12px;
   flex: 1;
@@ -180,7 +176,6 @@ body.dark-mode .chip input[type="color"]:hover {
   margin: .25em 0; 
 }
 
-/* Bottom row fixed */
 .bottom-row {
   flex-shrink: 0;
   display: flex;
@@ -202,17 +197,14 @@ body.dark-mode .chip input[type="color"]:hover {
   color: darkblue;
 }
 
-/* Chip items with golden border */
-/* Chip container flex gap */
 .chip {
   display: flex;
   align-items: center;
-  gap: 6px;   /* minimal spacing between boxes, adjust as needed */
+  gap: 6px;   
   padding: 6px;
   border-radius: 8px;
 }
 
-/* Chip items with golden border */
 .chip button,
 .chip select,
 .chip input[type="color"] {
@@ -224,7 +216,7 @@ body.dark-mode .chip input[type="color"]:hover {
   cursor: pointer;
 }
 
-/* Hover state keeps golden border */
+
 .chip button:hover,
 .chip select:hover,
 .chip input[type="color"]:hover {
@@ -247,15 +239,14 @@ body.dark-mode .chip input[type="color"]:hover {
   padding: 6px;
   min-width: 40px;
 }
-/* Visual page break inside editor */
-/* Forces a page break in PDF */
+
 .page-break {
-  page-break-before: always; /* new page before this element */
-  page-break-after: always;  /* new page after this element */
+  page-break-before: always;
+  page-break-after: always;  
   break-before: page;
   break-after: page;
 
-  border-top: 2px dashed goldenrod; /* visible in editor */
+  border-top: 2px dashed goldenrod; 
   margin: 16px 0;
   text-align: center;
   position: relative;
